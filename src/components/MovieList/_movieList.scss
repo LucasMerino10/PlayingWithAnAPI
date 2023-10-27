@@ -1,0 +1,25 @@
+@import "../VariablesAndMixins/variablesAndMixins";
+@import "../Header/header";
+
+.pages {
+    @include nav;
+    position: relative;
+    width: auto;
+
+    &__button {
+        @include button;
+        &:hover {
+            border-color: white;
+        }
+        &--disabled {
+            border: 2px solid red;
+            color: red;
+            background-color: black;
+            &:hover {
+                cursor: initial;
+                border-color: initial;
+            }
+        }
+    }
+}
+
