@@ -1,18 +1,23 @@
 import MovieCard from "../MovieCard/movieCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import PropTypes from "prop-types";
 
-function MovieList({ list, page }) {
+function MovieList({ list, page, minDate, maxDate }) {
   const [movieListDisplay, setMovieListDisplay] = useState([]);
   const [pageNumber, setpageNumber] = useState(page);
+  const apiKey = "api_key=21e02b5068821db1ee7df050d103412c";
+  const minOld = "1970-01-01";
+  const maxOld = "2000-01-01";
 
   useEffect(() => {
     setpageNumber(page);
   }, [page]);
-  const popularMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${pageNumber}&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=5000&api_key=21e02b5068821db1ee7df050d103412c`;
-  const oldMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${pageNumber}&primary_release_year=2000&sort_by=popularity.desc&api_key=21e02b5068821db1ee7df050d103412c`;
-  const upcomingMovies = `https://api.themoviedb.org/3/movie/upcoming?language=fr-FR&page=${pageNumber}&api_key=21e02b5068821db1ee7df050d103412c`;
-  const imgPath = "https://image.tmdb.org/t/p/original";
+  const popularMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${pageNumber}&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=5000&${apiKey}`;
+  // const oldMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${pageNumber}&primary_release_year=2000&sort_by=popularity.desc&${apiKey}`;
+  const oldMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${pageNumber}&primary_release_date.gte=${minOld}&primary_release_date.lte=${maxOld}&sort_by=popularity.desc&vote_count.gte=1000&${apiKey}`;
+  // const upcomingMovies = `https://api.themoviedb.org/3/movie/upcoming?language=fr-FR&page=${pageNumber}&${apiKey}`;
+  const upcomingMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${pageNumber}&sort_by=popularity.desc&primary_release_date.gte=${minDate}&primary_release_date.lte=${maxDate}&${apiKey}`;
 
   useEffect(() => {
     let url = "";
@@ -48,8 +53,8 @@ function MovieList({ list, page }) {
             key={movie.id}
             id={movie.id}
             title={movie.title}
-            posterImg={imgPath + movie.poster_path}
-            posterAlt={imgPath + movie.backdrop_path}
+            posterImg={movie.poster_path}
+            posterAlt={movie.backdrop_path}
             releaseDate={movie.release_date}
             rating={movie.vote_average}
           />
@@ -75,5 +80,12 @@ function MovieList({ list, page }) {
     </>
   );
 }
+
+MovieList.propTypes = {
+  list: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
+  minDate: PropTypes.string.isRequired,
+  maxDate: PropTypes.string.isRequired,
+};
 
 export default MovieList;

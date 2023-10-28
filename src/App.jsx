@@ -1,6 +1,3 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { useState } from "react";
 import Header from "./components/Header/Header.jsx";
 import "./index.css";
 import "./App.css";
@@ -13,7 +10,26 @@ import {
 import MovieList from "./components/MovieList/MovieList.jsx";
 
 function App() {
-  const [page, setPage] = useState(1);
+  const page = 1;
+  const minDate = getDate("now");
+  const maxDate = getDate("");
+
+  function getDate(time) {
+    const today = new Date().toLocaleDateString();
+    const dateElements = today.split("/");
+    if (time === "now") {
+      return dateElements[2] + "-" + dateElements[1] + "-" + dateElements[0];
+    } else {
+      return (
+        parseInt(dateElements[2]) +
+        1 +
+        "-" +
+        dateElements[1] +
+        "-" +
+        dateElements[0]
+      );
+    }
+  }
 
   const router = createBrowserRouter([
     {
@@ -34,7 +50,8 @@ function App() {
                 key="populaires"
                 list="populaires"
                 page={page}
-                setPage={setPage}
+                minDate={minDate}
+                maxDate={maxDate}
               />
             </>
           ),
@@ -43,7 +60,13 @@ function App() {
           path: "old",
           element: (
             <>
-              <MovieList key="old" list="old" page={page} setPage={setPage} />
+              <MovieList
+                key="old"
+                list="old"
+                page={page}
+                minDate={minDate}
+                maxDate={maxDate}
+              />
             </>
           ),
         },
@@ -55,7 +78,8 @@ function App() {
                 key="upcoming"
                 list="upcoming"
                 page={page}
-                setPage={setPage}
+                minDate={minDate}
+                maxDate={maxDate}
               />
             </>
           ),

@@ -1,21 +1,24 @@
-@import './../VariablesAndMixins/variablesAndMixins';
-
+@import "./../VariablesAndMixins/variablesAndMixins";
 
 .nav {
-    @include nav;
+  @include nav;
 
-    &__button {
-        @include button;
-    
-        &:hover {
-            border-color: white;
-        }
-        &--active {
-            border: 2px solid red;
-            color: red;
-            background-color: black;
-        }
+  &__button {
+    @include button;
 
+    &:hover {
+      border-color: $white;
     }
-    
+    &--active {
+      @include button--active;
+      &:hover {
+        border-color: initial;
+        cursor: default;
+      }
+    }
+  }
+  &__img {
+    width: 48px;
+    transform: translateX(-37px) translateY(-2px);
+  }
 }

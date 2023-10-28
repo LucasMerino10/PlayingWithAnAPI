@@ -1,82 +1,66 @@
-@import './../VariablesAndMixins/variablesAndMixins';
-
-@keyframes blur {
-    0% {
-        filter: blur(1rem);
-      }
-      25% {
-        filter: blur(.75rem);
-      }
-      50% {
-        filter: blur(.5rem);
-      }
-      75% {
-        filter: blur(.25rem);
-      }
-      100% {
-        filter: blur(0);
-      }
-}
-
+@import "./../VariablesAndMixins/variablesAndMixins";
 
 .card {
+  @include card;
+  width: 250px;
+  &--large {
+    @include card;
+    width: 850px;
+  }
+
+  &__img {
+    width: 100%;
+    border-top-left-radius: 0.2rem;
+    border-top-right-radius: 0.2rem;
+  }
+
+  &__button {
+    @include button;
+    &--active {
+      @include button--active;
+    }
+    &:hover {
+      border-color: $white;
+    }
+  }
+
+  &__title,
+  &__p {
+    text-align: center;
+    margin: 0.2rem;
+    padding: 0.2rem;
+  }
+
+  &__rating {
     display: flex;
+    justify-content: center;
     align-items: center;
-    flex-direction: column;
-    width: 250px;
-    border-radius: .2rem;
-    box-shadow: 0 0 2px white;
-    margin: .5rem;
-    background-color: black;
+    transform: translate(-5rem, -1.5rem);
+    padding: 1rem;
+    border-radius: 1.8rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    box-shadow: 0 0 4px $black;
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    font-weight: bold;
+    z-index: 0;
+    text-shadow: 0 0 1px $black;
 
-    &__img {
-        width: 100%;
-        border-top-left-radius: .2rem;
-        border-top-right-radius: .2rem;
-        // animation: blur 30s;
+    &--good {
+      background-color: green;
     }
-
-    &__button {
-        @include button;
-
-        &:hover {
-            border-color: white;
-        }
+    &--average {
+      background-color: yellow;
+      text-shadow: 0 0 1px $white;
+      color: black;
     }
-
-    &__title,
-    &__p {
-        text-align: center;
-        margin: .2rem;
-        padding: .2rem;
+    &--bad {
+      background-color: $red;
     }
-
-    &__rating {
-      transform: translate(-5rem, -1.5rem);
-      padding: 1rem;
-      border-radius: 1.8rem;
-      width: 1.6rem;
-      height: 1.6rem;
-      box-shadow: 0 0 4px black;
-      text-align: center;
-      font-size: 1.2rem;
-      line-height: 1.2rem;
-      font-weight: bold;
-      z-index: 0;
-      text-shadow: 0 0 1px black;
-
-      &--good {
-        background-color: green;
-      }
-      &--average {
-        background-color: yellow;
-        text-shadow: 0 0 1px white;
-        color: black
-      }
-      &--bad {
-        background-color: red;
-      }
+    &--invisible {
+      display: none;
     }
-
-
+  }
 }

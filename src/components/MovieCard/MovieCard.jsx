@@ -1,14 +1,16 @@
 import axios from "axios";
 import Cast from "../Cast/Cast";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
 function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
   const apiKey = "&api_key=21e02b5068821db1ee7df050d103412c";
 
   const imdbPath = "https://www.imdb.com/title/";
+  const imgPath = "https://image.tmdb.org/t/p/original";
   const [cast, setCast] = useState("");
   const [imdbId, setImdbId] = useState("");
-  const [imgSrc, setImgSrc] = useState(posterImg);
+  const [imgSrc, setImgSrc] = useState(imgPath + posterImg);
   const formattedReleaseDate = releaseFormat(releaseDate);
 
   function releaseFormat(releaseDate) {
@@ -32,40 +34,21 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
   }
 
   function getCast(id) {
-    // Requête pour obtenir l'id IMDB
     if (cast !== "") {
       setCast("");
+    } else {
+      axios
+        .get(
+          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=21e02b5068821db1ee7df050d103412c&language=fr-FR`
+        )
+        .then((response) => {
+          const cast = [];
+          for (let i = 0; i < 5 || i < response.data.cast[i].length; i++) {
+            cast.push(response.data.cast[i].name);
+          }
+          setCast(cast.join(", "));
+        });
     }
-
-    axios
-      .get(
-        `https://api.themoviedb.org/3/movie/${id}/credits?api_key=21e02b5068821db1ee7df050d103412c&language=fr-FR`
-      )
-      .then((response) => {
-        const cast = [];
-        for (let i = 0; i < 5 || i < response.data.cast[i].length; i++) {
-          cast.push(response.data.cast[i].name);
-        }
-        setCast(cast.join(", "));
-      });
-
-    // else {
-    //     const url = `https://moviesdatabase.p.rapidapi.com/titles/${imdbId}/`;
-    //     const options = {
-    //         method: 'GET',
-    //         headers: {
-    //             'X-RapidAPI-Key': '71f1b31559msh47ee2c84c5a7845p1c3708jsn8df9010fa9f5',
-    //             'X-RapidAPI-Host': 'moviesdatabase.p.rapidapi.com'
-    //         }
-    //     };
-
-    //     fetch(url, options)
-    //     .then(response => response.json())
-    //         .then(response => {
-    //             setCast((((response.results).primaryImage).caption).plainText);
-    //         })
-    //         .catch(err => console.error(err));
-    // }
   }
 
   function getColorRating(rating) {
@@ -79,19 +62,37 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
   }
 
   function switchPoster() {
-    imgSrc === posterImg ? setImgSrc(posterAlt) : setImgSrc(posterImg);
+    if (posterImg && posterAlt) {
+      imgSrc === imgPath + posterImg
+        ? setImgSrc(imgPath + posterAlt)
+        : setImgSrc(imgPath + posterImg);
+    }
+    console.log(imgSrc);
+  }
+
+  function getPercent(num) {
+    const percent = num.toFixed(1) * 10;
+    return percent;
   }
 
   return (
-    <article className="card">
+    <article
+      className={imgSrc === imgPath + posterImg ? "card" : "card--large"}
+    >
       <img
         onClick={() => switchPoster()}
         className="card__img"
-        src={imgSrc}
+        src={imgSrc ? imgSrc : posterAlt}
         alt=""
       />
-      <div className={"card__rating card__rating" + getColorRating(rating)}>
-        {rating.toFixed(1)}
+      <div
+        className={
+          rating > 0
+            ? "card__rating card__rating" + getColorRating(rating)
+            : "card__rating--invisible"
+        }
+      >
+        <p>{getPercent(rating)}</p>
       </div>
       <h3 className="card__title">{title}</h3>
       <p>Sortie : {formattedReleaseDate}</p>
@@ -102,12 +103,26 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
       >
         Voir sur IMDB
       </button>
-      <button className="card__button" onClick={() => getCast(id)}>
+      <button
+        className={
+          cast !== "" ? "card__button card__button--active" : "card__button"
+        }
+        onClick={() => getCast(id)}
+      >
         Main actors
       </button>
       <Cast cast={cast} />
     </article>
   );
 }
+
+MovieCard.propTypes = {
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  posterImg: PropTypes.string,
+  posterAlt: PropTypes.string,
+  releaseDate: PropTypes.string.isRequired,
+  rating: PropTypes.number.isRequired,
+};
 
 export default MovieCard;

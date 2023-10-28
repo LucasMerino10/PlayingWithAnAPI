@@ -4,6 +4,11 @@ function Header() {
   return (
     <>
       <nav className="nav">
+        <img
+          src="../src/assets/popcorn.svg"
+          alt="popcorn logo"
+          className="nav__img"
+        />
         <NavLink
           to="/populaires"
           className={({ isActive }) =>
