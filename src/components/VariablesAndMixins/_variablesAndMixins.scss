@@ -41,8 +41,10 @@ $white: white;
   align-items: center;
   flex-direction: column;
   border-radius: 0.2rem;
-  box-shadow: 0 0 20px -5px $red;
+  // box-shadow: 0 0 20px 0px $red;
+  box-shadow: 0 0 5px grey;
   margin: 1rem;
+  height: fit-content;
   background-color: $black;
   // transition: all 0.5s;
 }

@@ -57,12 +57,12 @@ function App() {
           ),
         },
         {
-          path: "old",
+          path: "oldies",
           element: (
             <>
               <MovieList
-                key="old"
-                list="old"
+                key="oldies"
+                list="oldies"
                 page={page}
                 minDate={minDate}
                 maxDate={maxDate}
@@ -87,35 +87,6 @@ function App() {
       ],
     },
   ]);
-  // const [page, setPage] = useState("1");
-  // const popularMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${page}&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=1000&api_key=21e02b5068821db1ee7df050d103412c`;
-  // const oldMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${page}&primary_release_year=2000&sort_by=popularity.desc&api_key=21e02b5068821db1ee7df050d103412c`;
-  // const upcomingMovies = `https://api.themoviedb.org/3/movie/upcoming?language=fr-FR&page=${page}&api_key=21e02b5068821db1ee7df050d103412c`;
-
-  // const [active, setActive] = useState("");
-  // const [movieListDisplay, setMovieListDisplay] = useState([]);
-
-  // function getMovies(url, button) {
-  //   if (active !== button) {
-  //     axios.get(url).then((response) => {
-  //       console.log(active);
-  //       setMovieListDisplay(response.data.results);
-  //     });
-  //   } else {
-  //     axios.get(url).then((response) => {
-  //       const movies = movieListDisplay.slice();
-  //       const newMovies = response.data.results;
-  //       movies.concat(newMovies);
-  //       console.log(movies);
-  //       setMovieListDisplay(movies);
-  //     });
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   getMovies(popularMovies, "Films Populaires");
-  //   setActive("Films Populaires");
-  // }, []);
 
   // useEffect(() => {
   //   const handleScroll = () => {
@@ -127,7 +98,7 @@ function App() {
   //       } else if (active === "Films à venir") {
   //         getMovies(upcomingMovies, active);
   //       } else if (active === "Films sortis avant 2000") {
-  //         getMovies(oldMovies, active);
+  //         getMovies(oldiesMovies, active);
   //       }
   //     }
   //   };

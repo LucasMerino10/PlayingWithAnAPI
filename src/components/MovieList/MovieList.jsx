@@ -25,7 +25,7 @@ function MovieList({ list, page, minDate, maxDate }) {
       case "populaires":
         url = popularMovies;
         break;
-      case "old":
+      case "oldies":
         url = oldMovies;
         break;
       case "upcoming":

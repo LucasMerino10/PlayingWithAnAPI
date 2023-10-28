@@ -16,6 +16,8 @@
 
   &__button {
     @include button;
+    min-width: 10rem;
+    margin-right: 0;
     &--active {
       @include button--active;
     }

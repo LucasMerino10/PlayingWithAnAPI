@@ -19,7 +19,7 @@ function Header() {
         </NavLink>
 
         <NavLink
-          to="/old"
+          to="/oldies"
           className={({ isActive }) =>
             isActive ? "nav__button nav__button--active" : "nav__button"
           }
