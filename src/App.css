@@ -20,10 +20,11 @@
   height: -moz-fit-content;
   height: fit-content;
   background-color: black;
-  width: 850px;
+  width: 670px;
 }
 .card__img {
   width: 100%;
+  max-height: 375px;
   border-top-left-radius: 0.2rem;
   border-top-right-radius: 0.2rem;
 }

@@ -2,24 +2,28 @@ import MovieCard from "../MovieCard/movieCard";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
-function MovieList({ list, page, minDate, maxDate }) {
+function MovieList({ list, page, setPage, minDate, maxDate }) {
+  const { id } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [movieListDisplay, setMovieListDisplay] = useState([]);
-  const [pageNumber, setpageNumber] = useState(page);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalMovies, setTotalMovies] = useState(0);
   const apiKey = "api_key=21e02b5068821db1ee7df050d103412c";
   const minOld = "1970-01-01";
   const maxOld = "2000-01-01";
 
-  useEffect(() => {
-    setpageNumber(page);
-  }, [page]);
-  const popularMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${pageNumber}&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=5000&${apiKey}`;
+  const popularMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${id}&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=5000&${apiKey}`;
   // const oldMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${pageNumber}&primary_release_year=2000&sort_by=popularity.desc&${apiKey}`;
-  const oldMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${pageNumber}&primary_release_date.gte=${minOld}&primary_release_date.lte=${maxOld}&sort_by=popularity.desc&vote_count.gte=1000&${apiKey}`;
+  const oldMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${id}&primary_release_date.gte=${minOld}&primary_release_date.lte=${maxOld}&sort_by=popularity.desc&vote_count.gte=1000&${apiKey}`;
   // const upcomingMovies = `https://api.themoviedb.org/3/movie/upcoming?language=fr-FR&page=${pageNumber}&${apiKey}`;
-  const upcomingMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${pageNumber}&sort_by=popularity.desc&primary_release_date.gte=${minDate}&primary_release_date.lte=${maxDate}&${apiKey}`;
-
+  const upcomingMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${id}&sort_by=popularity.desc&primary_release_date.gte=${minDate}&primary_release_date.lte=${maxDate}&${apiKey}`;
   useEffect(() => {
+    if (id !== page) {
+      setPage(parseInt(id));
+    }
     let url = "";
     switch (list) {
       case "populaires":
@@ -34,15 +38,29 @@ function MovieList({ list, page, minDate, maxDate }) {
     }
     axios.get(url).then((response) => {
       setMovieListDisplay(response.data.results);
+      setTotalPages(response.data.total_pages);
+      setTotalMovies(response.data.total_results);
     });
     window.scrollTo(0, 0);
   }, [list, oldMovies, popularMovies, upcomingMovies]);
 
+  function getCurrentUrl() {
+    const currentURL = location.pathname;
+    const urlWithoutID = currentURL.replace(/\/\d+$/, "");
+    return urlWithoutID;
+  }
+
   function pageUp() {
-    setpageNumber(pageNumber + 1);
+    const url = getCurrentUrl();
+    navigate(`${url}/${parseInt(id) + 1}`);
+    setPage(parseInt(id) + 1);
   }
   function pageDown() {
-    pageNumber > 1 ? setpageNumber(pageNumber - 1) : null;
+    if (page > 1) {
+      const url = getCurrentUrl();
+      navigate(`${url}/${parseInt(id) - 1}`);
+      setPage(parseInt(id) - 1);
+    }
   }
 
   return (
@@ -60,20 +78,29 @@ function MovieList({ list, page, minDate, maxDate }) {
           />
         ))}
       </section>
+      <p>Total pages : {totalPages}</p>
+      <p>Total movies : {totalMovies}</p>
       <nav className="pages">
         <button
           className={
-            pageNumber > 1
+            id > 1 ? "pages__button" : "pages__button pages__button--disabled"
+          }
+          type="button"
+          onClick={pageDown}
+          disabled={id <= 1 ? "disabled" : ""}
+        >
+          Previous Page
+        </button>
+        <button
+          className={
+            id < totalPages
               ? "pages__button"
               : "pages__button pages__button--disabled"
           }
           type="button"
-          onClick={pageDown}
-          disabled={pageNumber <= 1 ? "disabled" : ""}
+          onClick={pageUp}
+          disabled={id >= totalPages ? "disabled" : ""}
         >
-          Previous Page
-        </button>
-        <button className="pages__button" type="button" onClick={pageUp}>
           Next Page
         </button>
       </nav>
@@ -84,6 +111,7 @@ function MovieList({ list, page, minDate, maxDate }) {
 MovieList.propTypes = {
   list: PropTypes.string.isRequired,
   page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
   minDate: PropTypes.string.isRequired,
   maxDate: PropTypes.string.isRequired,
 };

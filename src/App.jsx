@@ -8,9 +8,10 @@ import {
   Navigate,
 } from "react-router-dom";
 import MovieList from "./components/MovieList/MovieList.jsx";
+import { useState } from "react";
 
 function App() {
-  const page = 1;
+  const [page, setPage] = useState(1);
   const minDate = getDate("now");
   const maxDate = getDate("");
 
@@ -36,20 +37,21 @@ function App() {
       path: "/",
       element: (
         <>
-          <Header />
           <Outlet />
         </>
       ),
       children: [
-        { index: true, element: <Navigate to="populaires" replace /> },
+        { index: true, element: <Navigate to="populaires/1" replace /> },
         {
-          path: "populaires",
+          path: "populaires/:id",
           element: (
             <>
+              <Header setPage={setPage} />
               <MovieList
                 key="populaires"
                 list="populaires"
                 page={page}
+                setPage={setPage}
                 minDate={minDate}
                 maxDate={maxDate}
               />
@@ -57,13 +59,15 @@ function App() {
           ),
         },
         {
-          path: "oldies",
+          path: "oldies/:id",
           element: (
             <>
+              <Header setPage={setPage} />
               <MovieList
                 key="oldies"
                 list="oldies"
                 page={page}
+                setPage={setPage}
                 minDate={minDate}
                 maxDate={maxDate}
               />
@@ -71,13 +75,15 @@ function App() {
           ),
         },
         {
-          path: "upcoming",
+          path: "upcoming/:id",
           element: (
             <>
+              <Header setPage={setPage} />
               <MovieList
                 key="upcoming"
                 list="upcoming"
                 page={page}
+                setPage={setPage}
                 minDate={minDate}
                 maxDate={maxDate}
               />

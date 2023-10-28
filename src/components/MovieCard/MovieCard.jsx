@@ -8,9 +8,12 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
 
   const imdbPath = "https://www.imdb.com/title/";
   const imgPath = "https://image.tmdb.org/t/p/original";
+  const notFound = "../src/assets/notFound.jpg";
   const [cast, setCast] = useState("");
   const [imdbId, setImdbId] = useState("");
-  const [imgSrc, setImgSrc] = useState(imgPath + posterImg);
+  const [imgSrc, setImgSrc] = useState(
+    posterImg ? imgPath + posterImg : posterAlt ? imgPath + posterAlt : notFound
+  );
   const formattedReleaseDate = releaseFormat(releaseDate);
 
   function releaseFormat(releaseDate) {
@@ -23,7 +26,6 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
       axios
         .get(`https://api.themoviedb.org/3/movie/${id}?language=fr-FR${apiKey}`)
         .then((response) => {
-          console.log(response.data.imdb_id);
           setImdbId(response.data.imdb_id);
         });
     }
@@ -67,7 +69,6 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
         ? setImgSrc(imgPath + posterAlt)
         : setImgSrc(imgPath + posterImg);
     }
-    console.log(imgSrc);
   }
 
   function getPercent(num) {
@@ -77,13 +78,19 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
 
   return (
     <article
-      className={imgSrc === imgPath + posterImg ? "card" : "card--large"}
+      className={
+        imgSrc === imgPath + posterImg
+          ? "card"
+          : imgSrc === notFound
+          ? "card"
+          : "card--large"
+      }
     >
       <img
         onClick={() => switchPoster()}
         className="card__img"
-        src={imgSrc ? imgSrc : posterAlt}
-        alt=""
+        src={imgSrc ? imgSrc : posterAlt ? imgPath + posterAlt : notFound}
+        alt={title}
       />
       <div
         className={
