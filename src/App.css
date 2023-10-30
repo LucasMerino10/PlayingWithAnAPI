@@ -8,6 +8,7 @@
   height: -moz-fit-content;
   height: fit-content;
   background-color: black;
+  transition: box-shadow 0.2s;
   width: 250px;
 }
 .card--large {
@@ -20,7 +21,11 @@
   height: -moz-fit-content;
   height: fit-content;
   background-color: black;
+  transition: box-shadow 0.2s;
   width: 670px;
+}
+.card:hover {
+  box-shadow: 0 0 5px 2px grey;
 }
 .card__img {
   width: 100%;
@@ -195,6 +200,26 @@
 .pages__button--disabled:hover {
   cursor: initial;
   border-color: initial;
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  height: auto;
+}
+
+.footer__paragraph {
+  margin-right: 1rem;
+  font-weight: bold;
+}
+
+.footer a {
+  display: flex;
+  align-items: center;
+}
+
+.footer__img {
+  width: 250px;
 }
 
 body {

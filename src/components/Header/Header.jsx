@@ -39,7 +39,7 @@ function Header({ setPage }) {
           }
           onClick={() => handleClick("oldies")}
         >
-          Films sortis avant 2000
+          Oldies
         </NavLink>
         <NavLink
           to={`/upcoming/1`}

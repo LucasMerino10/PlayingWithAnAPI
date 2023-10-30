@@ -21,7 +21,7 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
     return dateElements[2] + "/" + dateElements[1] + "/" + dateElements[0];
   }
 
-  function getIMDB(id) {
+  async function getIMDB(id) {
     if (imdbId === "") {
       axios
         .get(`https://api.themoviedb.org/3/movie/${id}?language=fr-FR${apiKey}`)
@@ -91,6 +91,7 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
         className="card__img"
         src={imgSrc ? imgSrc : posterAlt ? imgPath + posterAlt : notFound}
         alt={title}
+        loading="eager"
       />
       <div
         className={

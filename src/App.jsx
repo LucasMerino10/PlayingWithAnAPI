@@ -1,14 +1,15 @@
-import Header from "./components/Header/Header.jsx";
-import "./index.css";
-import "./App.css";
+import { useState } from "react";
 import {
   Outlet,
   RouterProvider,
   createBrowserRouter,
   Navigate,
 } from "react-router-dom";
+import Header from "./components/Header/Header.jsx";
 import MovieList from "./components/MovieList/MovieList.jsx";
-import { useState } from "react";
+import Footer from "./components/Footer/Footer.jsx";
+import "./index.css";
+import "./App.css";
 
 function App() {
   const [page, setPage] = useState(1);
@@ -55,6 +56,7 @@ function App() {
                 minDate={minDate}
                 maxDate={maxDate}
               />
+              <Footer />
             </>
           ),
         },
@@ -71,6 +73,7 @@ function App() {
                 minDate={minDate}
                 maxDate={maxDate}
               />
+              <Footer />
             </>
           ),
         },
@@ -87,8 +90,13 @@ function App() {
                 minDate={minDate}
                 maxDate={maxDate}
               />
+              <Footer />
             </>
           ),
+        },
+        {
+          path: "/movie/:id",
+          element: <></>,
         },
       ],
     },

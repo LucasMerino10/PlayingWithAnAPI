@@ -1,16 +1,16 @@
-@import './components/MovieCard/movieCard';
-@import './components/Header/header';
+@import "./components/MovieCard/movieCard";
+@import "./components/Header/header";
 @import "./components/MovieList/movieList";
+@import "./components/Footer/footer";
 
-body{
-    display: flex;
+body {
+  display: flex;
 }
 
 .movieSection {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    width: 100%;
-    margin-top: 5rem;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 5rem;
 }
-

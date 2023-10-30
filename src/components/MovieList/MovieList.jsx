@@ -16,10 +16,9 @@ function MovieList({ list, page, setPage, minDate, maxDate }) {
   const maxOld = "2000-01-01";
 
   const popularMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${id}&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=5000&${apiKey}`;
-  // const oldMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${pageNumber}&primary_release_year=2000&sort_by=popularity.desc&${apiKey}`;
   const oldMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${id}&primary_release_date.gte=${minOld}&primary_release_date.lte=${maxOld}&sort_by=popularity.desc&vote_count.gte=1000&${apiKey}`;
-  // const upcomingMovies = `https://api.themoviedb.org/3/movie/upcoming?language=fr-FR&page=${pageNumber}&${apiKey}`;
   const upcomingMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${id}&sort_by=popularity.desc&primary_release_date.gte=${minDate}&primary_release_date.lte=${maxDate}&${apiKey}`;
+
   useEffect(() => {
     if (id !== page) {
       setPage(parseInt(id));
@@ -36,13 +35,17 @@ function MovieList({ list, page, setPage, minDate, maxDate }) {
         url = upcomingMovies;
         break;
     }
-    axios.get(url).then((response) => {
-      setMovieListDisplay(response.data.results);
-      setTotalPages(response.data.total_pages);
-      setTotalMovies(response.data.total_results);
-    });
+    fetchData(url);
+
     window.scrollTo(0, 0);
-  }, [list, oldMovies, popularMovies, upcomingMovies]);
+  }, [id]);
+
+  async function fetchData(url) {
+    const response = await axios.get(url);
+    setMovieListDisplay(response.data.results);
+    setTotalPages(response.data.total_pages);
+    setTotalMovies(response.data.total_results);
+  }
 
   function getCurrentUrl() {
     const currentURL = location.pathname;
@@ -53,13 +56,13 @@ function MovieList({ list, page, setPage, minDate, maxDate }) {
   function pageUp() {
     const url = getCurrentUrl();
     navigate(`${url}/${parseInt(id) + 1}`);
-    setPage(parseInt(id) + 1);
+    // setPage(parseInt(id) + 1);
   }
   function pageDown() {
     if (page > 1) {
       const url = getCurrentUrl();
       navigate(`${url}/${parseInt(id) - 1}`);
-      setPage(parseInt(id) - 1);
+      // setPage(parseInt(id) - 1);
     }
   }
 
