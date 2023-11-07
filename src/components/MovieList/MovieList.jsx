@@ -11,7 +11,7 @@ function MovieList({ list, page, setPage, minDate, maxDate }) {
   const [movieListDisplay, setMovieListDisplay] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [totalMovies, setTotalMovies] = useState(0);
-  const apiKey = "api_key=21e02b5068821db1ee7df050d103412c";
+  const apiKey = import.meta.env.VITE_API_KEY;
   const minOld = "1970-01-01";
   const maxOld = "2000-01-01";
 
