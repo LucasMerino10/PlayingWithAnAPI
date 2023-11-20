@@ -1,51 +1,42 @@
 import MovieCard from "../MovieCard/movieCard";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import useLanguageContext from "../../contexts/LanguageContext";
 import PropTypes from "prop-types";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  useLoaderData,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
-function MovieList({ list, page, setPage, minDate, maxDate }) {
+function MovieList({ page, setPage }) {
   const { id } = useParams();
+  const { language } = useLanguageContext();
   const location = useLocation();
   const navigate = useNavigate();
-  const [movieListDisplay, setMovieListDisplay] = useState([]);
+  const movieList = useLoaderData();
   const [totalPages, setTotalPages] = useState(0);
   const [totalMovies, setTotalMovies] = useState(0);
-  const apiKey = import.meta.env.VITE_API_KEY;
-  const minOld = "1970-01-01";
-  const maxOld = "2000-01-01";
-
-  const popularMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${id}&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=5000&${apiKey}`;
-  const oldMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${id}&primary_release_date.gte=${minOld}&primary_release_date.lte=${maxOld}&sort_by=popularity.desc&vote_count.gte=1000&${apiKey}`;
-  const upcomingMovies = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=fr-FR&page=${id}&sort_by=popularity.desc&primary_release_date.gte=${minDate}&primary_release_date.lte=${maxDate}&${apiKey}`;
 
   useEffect(() => {
-    if (id !== page) {
+    if (parseInt(id) !== page) {
       setPage(parseInt(id));
     }
-    let url = "";
-    switch (list) {
-      case "populaires":
-        url = popularMovies;
-        break;
-      case "oldies":
-        url = oldMovies;
-        break;
-      case "upcoming":
-        url = upcomingMovies;
-        break;
-    }
-    fetchData(url);
+    setTotalPages(movieList.total_pages);
+    setTotalMovies(movieList.total_results);
+    // if ()
+  }, [id, language]);
 
-    window.scrollTo(0, 0);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
 
-  async function fetchData(url) {
-    const response = await axios.get(url);
-    setMovieListDisplay(response.data.results);
-    setTotalPages(response.data.total_pages);
-    setTotalMovies(response.data.total_results);
-  }
+  // async function fetchData(url) {
+  //   const response = await axios.get(url);
+  //   // setMovieListDisplay(response.data.results);
+  //   setTotalPages(movieList.total_pages);
+  //   setTotalMovies(movieList.total_results);
+  // }
 
   function getCurrentUrl() {
     const currentURL = location.pathname;
@@ -69,7 +60,7 @@ function MovieList({ list, page, setPage, minDate, maxDate }) {
   return (
     <>
       <section className="movieSection">
-        {movieListDisplay.map((movie) => (
+        {movieList.results.map((movie) => (
           <MovieCard
             key={movie.id}
             id={movie.id}
@@ -81,8 +72,16 @@ function MovieList({ list, page, setPage, minDate, maxDate }) {
           />
         ))}
       </section>
-      <p>Total pages : {totalPages}</p>
-      <p>Total movies : {totalMovies}</p>
+      <p>
+        {language === "fr-FR"
+          ? `Nombre de pages : ${totalPages}`
+          : `Total pages : ${totalPages}`}
+      </p>
+      <p>
+        {language === "fr-FR"
+          ? `Nombre de films : ${totalMovies}`
+          : `Total movies : ${totalMovies}`}
+      </p>
       <nav className="pages">
         <button
           className={
@@ -92,8 +91,9 @@ function MovieList({ list, page, setPage, minDate, maxDate }) {
           onClick={pageDown}
           disabled={id <= 1 ? "disabled" : ""}
         >
-          Previous Page
+          {language === "fr-FR" ? "Page Précédente" : "Previous Page"}
         </button>
+        <p>{page}</p>
         <button
           className={
             id < totalPages
@@ -104,7 +104,7 @@ function MovieList({ list, page, setPage, minDate, maxDate }) {
           onClick={pageUp}
           disabled={id >= totalPages ? "disabled" : ""}
         >
-          Next Page
+          {language === "fr-FR" ? "Page Suivante" : "Next Page"}
         </button>
       </nav>
     </>

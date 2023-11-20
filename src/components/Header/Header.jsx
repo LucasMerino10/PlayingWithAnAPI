@@ -1,18 +1,27 @@
-import { NavLink } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import useLanguageContext from "../../contexts/LanguageContext";
 import PropTypes from "prop-types";
 
 function Header({ setPage }) {
   const location = useLocation();
+  const { language, setLanguage } = useLanguageContext();
 
   function handleClick(url) {
     if (!location.pathname.includes(url)) {
       setPage(1);
     }
   }
+
+  const switchLanguage = () => {
+    language === "fr-FR" ? setLanguage("en-EN") : setLanguage("fr-FR");
+  };
+
   return (
     <>
       <nav className="nav">
+        <button type="button" onClick={switchLanguage}>
+          Switch Language
+        </button>
         <img
           src="../src/assets/popcorn.svg"
           alt="popcorn logo"

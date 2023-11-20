@@ -5,16 +5,22 @@ import {
   createBrowserRouter,
   Navigate,
 } from "react-router-dom";
+import useLanguageContext from "./contexts/LanguageContext.jsx";
 import Header from "./components/Header/Header.jsx";
 import MovieList from "./components/MovieList/MovieList.jsx";
 import Footer from "./components/Footer/Footer.jsx";
+import MoviePage from "./components/MoviePage/MoviePage.jsx";
 import "./index.css";
 import "./App.css";
 
 function App() {
+  const { language } = useLanguageContext();
+  const apiKey = import.meta.env.VITE_API_KEY;
   const [page, setPage] = useState(1);
   const minDate = getDate("now");
   const maxDate = getDate("");
+  const minOld = "1970-01-01";
+  const maxOld = "2000-01-01";
 
   function getDate(time) {
     const today = new Date().toLocaleDateString();
@@ -48,80 +54,56 @@ function App() {
           element: (
             <>
               <Header setPage={setPage} />
-              <MovieList
-                key="populaires"
-                list="populaires"
-                page={page}
-                setPage={setPage}
-                minDate={minDate}
-                maxDate={maxDate}
-              />
+              <MovieList key="populaires" page={page} setPage={setPage} />
               <Footer />
             </>
           ),
+          loader: async ({ params }) => {
+            const response = await fetch(
+              `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=${language}&page=${params.id}&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=5000&${apiKey}`
+            );
+            return await response.json();
+          },
         },
         {
           path: "oldies/:id",
           element: (
             <>
               <Header setPage={setPage} />
-              <MovieList
-                key="oldies"
-                list="oldies"
-                page={page}
-                setPage={setPage}
-                minDate={minDate}
-                maxDate={maxDate}
-              />
+              <MovieList key="oldies" page={page} setPage={setPage} />
               <Footer />
             </>
           ),
+          loader: async ({ params }) => {
+            const response = await fetch(
+              `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=${language}&page=${params.id}&primary_release_date.gte=${minOld}&primary_release_date.lte=${maxOld}&sort_by=popularity.desc&vote_count.gte=1000&${apiKey}`
+            );
+            return await response.json();
+          },
         },
         {
           path: "upcoming/:id",
           element: (
             <>
               <Header setPage={setPage} />
-              <MovieList
-                key="upcoming"
-                list="upcoming"
-                page={page}
-                setPage={setPage}
-                minDate={minDate}
-                maxDate={maxDate}
-              />
+              <MovieList key="upcoming" page={page} setPage={setPage} />
               <Footer />
             </>
           ),
+          loader: async ({ params }) => {
+            const response = await fetch(
+              `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=${language}&page=${params.id}&sort_by=popularity.desc&primary_release_date.gte=${minDate}&primary_release_date.lte=${maxDate}&${apiKey}`
+            );
+            return await response.json();
+          },
         },
         {
           path: "/movie/:id",
-          element: <></>,
+          element: <MoviePage />,
         },
       ],
     },
   ]);
-
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const bottom = document.body.scrollHeight;
-  //     if (window.scrollY + window.innerHeight >= bottom) {
-  //       console.log(page);
-  //       if (active === "Films Populaires") {
-  //         getMovies(popularMovies, active);
-  //       } else if (active === "Films à venir") {
-  //         getMovies(upcomingMovies, active);
-  //       } else if (active === "Films sortis avant 2000") {
-  //         getMovies(oldiesMovies, active);
-  //       }
-  //     }
-  //   };
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
 
   return <RouterProvider router={router} />;
 }

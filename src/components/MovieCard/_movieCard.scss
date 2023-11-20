@@ -3,10 +3,6 @@
 .card {
   @include card;
   width: 250px;
-  &--large {
-    @include card;
-    width: 670px;
-  }
 
   &:hover {
     box-shadow: 0 0 5px 2px grey;
@@ -54,6 +50,7 @@
     font-weight: bold;
     z-index: 0;
     text-shadow: 0 0 1px $black;
+    margin: 0;
 
     &--good {
       background-color: green;

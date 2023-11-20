@@ -11,19 +11,6 @@
   transition: box-shadow 0.2s;
   width: 250px;
 }
-.card--large {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  border-radius: 0.2rem;
-  box-shadow: 0 0 5px grey;
-  margin: 1rem;
-  height: -moz-fit-content;
-  height: fit-content;
-  background-color: black;
-  transition: box-shadow 0.2s;
-  width: 670px;
-}
 .card:hover {
   box-shadow: 0 0 5px 2px grey;
 }
@@ -74,6 +61,7 @@
   font-weight: bold;
   z-index: 0;
   text-shadow: 0 0 1px black;
+  margin: 0;
 }
 .card__rating--good {
   background-color: green;
@@ -178,6 +166,7 @@
   z-index: 1;
   position: relative;
   width: auto;
+  margin-bottom: 2rem;
 }
 .pages__button {
   border-radius: 8px;
@@ -188,6 +177,7 @@
   border: 2px solid transparent;
   transition: all 0.5s;
   margin-right: 1rem;
+  margin: 0.5rem 1rem;
 }
 .pages__button:hover {
   border-color: white;
@@ -206,6 +196,7 @@
   display: flex;
   justify-content: center;
   height: auto;
+  margin-bottom: 1rem;
 }
 
 .footer__paragraph {
@@ -219,7 +210,7 @@
 }
 
 .footer__img {
-  width: 250px;
+  width: 400px;
 }
 
 body {

@@ -1,19 +1,23 @@
 import axios from "axios";
 import Cast from "../Cast/Cast";
+import { Link } from "react-router-dom";
 import { useState } from "react";
+import useLanguageContext from "../../contexts/LanguageContext";
 import PropTypes from "prop-types";
 
 function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
   const apiKey = "&api_key=21e02b5068821db1ee7df050d103412c";
-
+  const { language } = useLanguageContext();
   const imdbPath = "https://www.imdb.com/title/";
   const imgPath = "https://image.tmdb.org/t/p/original";
   const notFound = "../src/assets/notFound.jpg";
   const [cast, setCast] = useState("");
   const [imdbId, setImdbId] = useState("");
-  const [imgSrc, setImgSrc] = useState(
-    posterImg ? imgPath + posterImg : posterAlt ? imgPath + posterAlt : notFound
-  );
+  const imgSrc = posterImg
+    ? imgPath + posterImg
+    : posterAlt
+    ? imgPath + posterAlt
+    : notFound;
   const formattedReleaseDate = releaseFormat(releaseDate);
 
   function releaseFormat(releaseDate) {
@@ -63,45 +67,25 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
     }
   }
 
-  function switchPoster() {
-    if (posterImg && posterAlt) {
-      imgSrc === imgPath + posterImg
-        ? setImgSrc(imgPath + posterAlt)
-        : setImgSrc(imgPath + posterImg);
-    }
-  }
-
   function getPercent(num) {
     const percent = num.toFixed(1) * 10;
     return percent;
   }
 
   return (
-    <article
-      className={
-        imgSrc === imgPath + posterImg
-          ? "card"
-          : imgSrc === notFound
-          ? "card"
-          : "card--large"
-      }
-    >
-      <img
-        onClick={() => switchPoster()}
-        className="card__img"
-        src={imgSrc ? imgSrc : posterAlt ? imgPath + posterAlt : notFound}
-        alt={title}
-        loading="eager"
-      />
-      <div
+    <article className="card">
+      <Link to={`/movie/${id}`}>
+        <img className="card__img" src={imgSrc} alt={title} loading="lazy" />
+      </Link>
+      <p
         className={
           rating > 0
             ? "card__rating card__rating" + getColorRating(rating)
             : "card__rating--invisible"
         }
       >
-        <p>{getPercent(rating)}</p>
-      </div>
+        {getPercent(rating)}
+      </p>
       <h3 className="card__title">{title}</h3>
       <p>Sortie : {formattedReleaseDate}</p>
       <button
@@ -109,7 +93,7 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
         onMouseEnter={() => getIMDB(id)}
         onClick={() => handleclick()}
       >
-        Voir sur IMDB
+        {language === "fr-FR" ? "Voir sur IMDB" : "See on IMDB"}
       </button>
       <button
         className={
@@ -117,7 +101,7 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
         }
         onClick={() => getCast(id)}
       >
-        Main actors
+        {language === "fr-FR" ? "Acteurs principaux" : "Main actors"}
       </button>
       <Cast cast={cast} />
     </article>

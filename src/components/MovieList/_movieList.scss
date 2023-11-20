@@ -5,9 +5,11 @@
   @include nav;
   position: relative;
   width: auto;
+  margin-bottom: 2rem;
 
   &__button {
     @include button;
+    margin: 0.5rem 1rem;
     &:hover {
       border-color: $white;
     }
