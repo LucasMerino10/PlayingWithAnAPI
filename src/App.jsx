@@ -15,8 +15,8 @@ import "./App.css";
 
 function App() {
   const { language } = useLanguageContext();
-  const apiKey = import.meta.env.VITE_API_KEY;
   const [page, setPage] = useState(1);
+  const apiKey = import.meta.env.VITE_API_KEY;
   const minDate = getDate("now");
   const maxDate = getDate("");
   const minOld = "1970-01-01";
