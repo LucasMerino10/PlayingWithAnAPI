@@ -1,8 +1,10 @@
 import { NavLink, useLocation } from "react-router-dom";
 import LanguageSwitch from "../LanguageSwitch/LanguageSwitch";
+import useLanguageContext from "../../contexts/LanguageContext";
 import PropTypes from "prop-types";
 
 function Header({ setPage }) {
+  const { language } = useLanguageContext();
   const location = useLocation();
   // const { language, setLanguage } = useLanguageContext();
 
@@ -18,12 +20,12 @@ function Header({ setPage }) {
         {/* <button type="button" onClick={switchLanguage}>
           Switch Language
         </button> */}
+        <LanguageSwitch />
         <img
           src="../src/assets/popcorn.svg"
           alt="popcorn logo"
           className="nav__img"
         />
-        <LanguageSwitch />
         <NavLink
           to={`/populaires/1`}
           className={
@@ -33,7 +35,7 @@ function Header({ setPage }) {
           }
           onClick={() => handleClick("populaires")}
         >
-          Films Populaires
+          {language === "fr-FR" ? "Populaires" : "Popular"}
         </NavLink>
 
         <NavLink
@@ -45,7 +47,7 @@ function Header({ setPage }) {
           }
           onClick={() => handleClick("oldies")}
         >
-          Oldies
+          {language === "fr-FR" ? "Sortis avant 2000" : "Oldies"}
         </NavLink>
         <NavLink
           to={`/upcoming/1`}
@@ -56,7 +58,7 @@ function Header({ setPage }) {
           }
           onClick={() => handleClick("upcoming")}
         >
-          Films à venir
+          {language === "fr-FR" ? "Bientôt" : "Upcoming"}
         </NavLink>
       </nav>
     </>

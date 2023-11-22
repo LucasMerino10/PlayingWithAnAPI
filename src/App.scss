@@ -13,5 +13,11 @@ body {
   justify-content: space-around;
   flex-wrap: wrap;
   width: 100%;
-  margin-top: 5rem;
+  margin-top: 11rem;
+}
+
+@media screen and (min-width: 768px) {
+  .movieSection {
+    margin-top: 5rem;
+  }
 }
