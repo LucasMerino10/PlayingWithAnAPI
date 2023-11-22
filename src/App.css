@@ -208,6 +208,8 @@
   width: 50%;
   text-align: center;
   margin: 0.5rem 1rem;
+  width: 40%;
+  max-width: 10rem;
 }
 .pages__button:hover {
   border-color: white;
@@ -252,6 +254,7 @@
 }
 .switch__p {
   opacity: 0;
+  z-index: -1;
 }
 .switch__p--fr {
   position: absolute;
@@ -270,7 +273,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: black;
+  background-color: rgba(0, 0, 0, 0);
   transition: 0.4s;
   border: 1px solid #e50914;
 }

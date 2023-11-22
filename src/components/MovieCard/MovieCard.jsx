@@ -9,7 +9,8 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
   const apiKey = "&api_key=21e02b5068821db1ee7df050d103412c";
   const { language } = useLanguageContext();
   const imdbPath = "https://www.imdb.com/title/";
-  const imgPath = "https://image.tmdb.org/t/p/original";
+  // const imgPath = "https://image.tmdb.org/t/p/original";
+  const imgPath = "https://image.tmdb.org/t/p/w500";
   const notFound = "../src/assets/notFound.jpg";
   const [cast, setCast] = useState("");
   const [imdbId, setImdbId] = useState("");
@@ -75,7 +76,7 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
   return (
     <article className="card">
       <Link to={`/movie/${id}`}>
-        <img className="card__img" src={imgSrc} alt={title} loading="lazy" />
+        <img className="card__img" src={imgSrc} alt={title} loading="eager" />
       </Link>
       <p
         className={

@@ -24,19 +24,11 @@ function MovieList({ page, setPage }) {
     }
     setTotalPages(movieList.total_pages);
     setTotalMovies(movieList.total_results);
-    // if ()
   }, [id, language]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
-
-  // async function fetchData(url) {
-  //   const response = await axios.get(url);
-  //   // setMovieListDisplay(response.data.results);
-  //   setTotalPages(movieList.total_pages);
-  //   setTotalMovies(movieList.total_results);
-  // }
 
   function getCurrentUrl() {
     const currentURL = location.pathname;
@@ -47,13 +39,11 @@ function MovieList({ page, setPage }) {
   function pageUp() {
     const url = getCurrentUrl();
     navigate(`${url}/${parseInt(id) + 1}`);
-    // setPage(parseInt(id) + 1);
   }
   function pageDown() {
     if (page > 1) {
       const url = getCurrentUrl();
       navigate(`${url}/${parseInt(id) - 1}`);
-      // setPage(parseInt(id) - 1);
     }
   }
 
@@ -91,7 +81,7 @@ function MovieList({ page, setPage }) {
           onClick={pageDown}
           disabled={id <= 1 ? "disabled" : ""}
         >
-          {language === "fr-FR" ? "Page Précédente" : "Previous Page"}
+          {language === "fr-FR" ? "Précédente" : "Previous"}
         </button>
         <p>{page}</p>
         <button
@@ -104,7 +94,7 @@ function MovieList({ page, setPage }) {
           onClick={pageUp}
           disabled={id >= totalPages ? "disabled" : ""}
         >
-          {language === "fr-FR" ? "Page Suivante" : "Next Page"}
+          {language === "fr-FR" ? "Suivante" : "Next"}
         </button>
       </nav>
     </>

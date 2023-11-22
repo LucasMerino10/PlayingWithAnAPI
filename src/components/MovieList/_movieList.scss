@@ -10,6 +10,8 @@
   &__button {
     @include button;
     margin: 0.5rem 1rem;
+    width: 40%;
+    max-width: 10rem;
     &:hover {
       border-color: $white;
     }
