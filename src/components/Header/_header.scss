@@ -3,6 +3,9 @@
 .nav {
   @include nav;
 
+  &--rectaction {
+    transform: translateX(-100px);
+  }
   &__button {
     @include button;
 

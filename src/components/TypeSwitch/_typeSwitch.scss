@@ -1,23 +1,23 @@
 @import "../VariablesAndMixins/variablesAndMixins";
 
-.switch {
+.typeSwitch {
   @include switch;
   left: 10px;
-  top: 14px;
+  top: 70px;
 
   &__p {
     opacity: 0;
     z-index: -1;
-    &--fr {
+    &--movies {
       position: absolute;
-      left: 8px;
+      left: 6px;
       top: 4px;
       margin: 0;
       cursor: pointer;
     }
-    &--en {
+    &--series {
       position: absolute;
-      left: 34px;
+      left: 8px;
       top: 4px;
       margin: 0;
       cursor: pointer;

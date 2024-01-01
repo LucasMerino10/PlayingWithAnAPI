@@ -1,7 +1,6 @@
-import MovieCard from "../MovieCard/movieCard";
+import MovieCard from "../MovieCard/MovieCard";
 import { useState, useEffect } from "react";
-import useLanguageContext from "../../contexts/LanguageContext";
-import PropTypes from "prop-types";
+import useGeneralContext from "../../contexts/GeneralContext";
 import {
   useLoaderData,
   useLocation,
@@ -9,9 +8,9 @@ import {
   useParams,
 } from "react-router-dom";
 
-function MovieList({ page, setPage }) {
+function MovieList() {
   const { id } = useParams();
-  const { language } = useLanguageContext();
+  const { page, setPage, language, type, getCurrentUrl } = useGeneralContext();
   const location = useLocation();
   const navigate = useNavigate();
   const movieList = useLoaderData();
@@ -30,19 +29,13 @@ function MovieList({ page, setPage }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [id]);
 
-  function getCurrentUrl() {
-    const currentURL = location.pathname;
-    const urlWithoutID = currentURL.replace(/\/\d+$/, "");
-    return urlWithoutID;
-  }
-
   function pageUp() {
-    const url = getCurrentUrl();
+    const url = getCurrentUrl(location);
     navigate(`${url}/${parseInt(id) + 1}`);
   }
   function pageDown() {
     if (page > 1) {
-      const url = getCurrentUrl();
+      const url = getCurrentUrl(location);
       navigate(`${url}/${parseInt(id) - 1}`);
     }
   }
@@ -54,10 +47,12 @@ function MovieList({ page, setPage }) {
           <MovieCard
             key={movie.id}
             id={movie.id}
-            title={movie.title}
+            title={type === "movies" ? movie.title : movie.name}
             posterImg={movie.poster_path}
             posterAlt={movie.backdrop_path}
-            releaseDate={movie.release_date}
+            releaseDate={
+              type === "movies" ? movie.release_date : movie.first_air_date
+            }
             rating={movie.vote_average}
           />
         ))}
@@ -100,13 +95,5 @@ function MovieList({ page, setPage }) {
     </>
   );
 }
-
-MovieList.propTypes = {
-  list: PropTypes.string.isRequired,
-  page: PropTypes.number.isRequired,
-  setPage: PropTypes.func.isRequired,
-  minDate: PropTypes.string.isRequired,
-  maxDate: PropTypes.string.isRequired,
-};
 
 export default MovieList;

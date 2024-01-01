@@ -1,12 +1,12 @@
 import { NavLink, useLocation } from "react-router-dom";
 import LanguageSwitch from "../LanguageSwitch/LanguageSwitch";
-import useLanguageContext from "../../contexts/LanguageContext";
-import PropTypes from "prop-types";
+import TypeSwitch from "../TypeSwitch/TypeSwitch";
+import useGeneralContext from "../../contexts/GeneralContext";
+import logo from "../../assets/popcorn.svg";
 
-function Header({ setPage }) {
-  const { language } = useLanguageContext();
+function Header() {
+  const { setPage, language, type } = useGeneralContext();
   const location = useLocation();
-  // const { language, setLanguage } = useLanguageContext();
 
   function handleClick(url) {
     if (!location.pathname.includes(url)) {
@@ -21,25 +21,34 @@ function Header({ setPage }) {
           Switch Language
         </button> */}
         <LanguageSwitch />
-        <img
-          src="../src/assets/popcorn.svg"
-          alt="popcorn logo"
-          className="nav__img"
-        />
+        <TypeSwitch />
+        <img src={logo} alt="popcorn logo" className="nav__img" />
         <NavLink
-          to={`/populaires/1`}
+          to={type === "movies" ? "/movies/trending/1" : "/series/trending/1"}
           className={
-            location.pathname.includes("populaires")
+            location.pathname.includes("trending")
               ? "nav__button nav__button--active"
               : "nav__button"
           }
-          onClick={() => handleClick("populaires")}
+          onClick={() => handleClick("trending")}
         >
-          {language === "fr-FR" ? "Populaires" : "Popular"}
+          {language === "fr-FR" ? "Populaires" : "Trending"}
         </NavLink>
 
         <NavLink
-          to={`/oldies/1`}
+          to={type === "movies" ? "/movies/top-rated/1" : "/series/top-rated/1"}
+          className={
+            location.pathname.includes("top-rated")
+              ? "nav__button nav__button--active"
+              : "nav__button"
+          }
+          onClick={() => handleClick("top-rated")}
+        >
+          {language === "fr-FR" ? "Les mieux notés" : "Top rated"}
+        </NavLink>
+
+        <NavLink
+          to={type === "movies" ? "/movies/oldies/1" : "/series/oldies/1"}
           className={
             location.pathname.includes("oldies")
               ? "nav__button nav__button--active"
@@ -49,24 +58,22 @@ function Header({ setPage }) {
         >
           {language === "fr-FR" ? "Sortis avant 2000" : "Oldies"}
         </NavLink>
-        <NavLink
-          to={`/upcoming/1`}
-          className={
-            location.pathname.includes("upcoming")
-              ? "nav__button nav__button--active"
-              : "nav__button"
-          }
-          onClick={() => handleClick("upcoming")}
-        >
-          {language === "fr-FR" ? "Bientôt" : "Upcoming"}
-        </NavLink>
+        {type === "movies" && (
+          <NavLink
+            to={`/movies/upcoming/1`}
+            className={
+              location.pathname.includes("upcoming")
+                ? "nav__button nav__button--active"
+                : "nav__button"
+            }
+            onClick={() => handleClick("upcoming")}
+          >
+            {language === "fr-FR" ? "Bientôt" : "Upcoming"}
+          </NavLink>
+        )}
       </nav>
     </>
   );
 }
-
-Header.propTypes = {
-  setPage: PropTypes.func.isRequired,
-};
 
 export default Header;
