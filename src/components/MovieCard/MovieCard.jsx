@@ -2,12 +2,12 @@ import axios from "axios";
 import Cast from "../Cast/Cast";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import useLanguageContext from "../../contexts/LanguageContext";
+import useGeneralContext from "../../contexts/GeneralContext";
 import PropTypes from "prop-types";
 
 function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
-  const apiKey = "&api_key=21e02b5068821db1ee7df050d103412c";
-  const { language } = useLanguageContext();
+  const apiKey = import.meta.env.VITE_API_KEY;
+  const { language } = useGeneralContext();
   const imdbPath = "https://www.imdb.com/title/";
   // const imgPath = "https://image.tmdb.org/t/p/original";
   const imgPath = "https://image.tmdb.org/t/p/w500";
@@ -29,7 +29,9 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
   async function getIMDB(id) {
     if (imdbId === "") {
       axios
-        .get(`https://api.themoviedb.org/3/movie/${id}?language=fr-FR${apiKey}`)
+        .get(
+          `https://api.themoviedb.org/3/movie/${id}?language=fr-FR&${apiKey}`
+        )
         .then((response) => {
           setImdbId(response.data.imdb_id);
         });
@@ -45,9 +47,7 @@ function MovieCard({ id, title, posterImg, posterAlt, releaseDate, rating }) {
       setCast("");
     } else {
       axios
-        .get(
-          `https://api.themoviedb.org/3/movie/${id}/credits?api_key=21e02b5068821db1ee7df050d103412c&language=fr-FR`
-        )
+        .get(`https://api.themoviedb.org/3/movie/${id}/credits?${apiKey}`)
         .then((response) => {
           const cast = [];
           for (let i = 0; i < 5 || i < response.data.cast[i].length; i++) {

@@ -1,3 +1,5 @@
+import tmdbLogo from "../../assets/tmdb-alt.svg";
+
 function Footer() {
   return (
     <>
@@ -9,7 +11,7 @@ function Footer() {
           target="blank"
         >
           <img
-            src="../src/assets/tmdb-alt.svg"
+            src={tmdbLogo}
             alt="The Movie DataBase"
             className="footer__img"
           />

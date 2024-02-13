@@ -1,11 +1,10 @@
-import { useState } from "react";
 import {
   Outlet,
   RouterProvider,
   createBrowserRouter,
   Navigate,
 } from "react-router-dom";
-import useLanguageContext from "./contexts/LanguageContext.jsx";
+import useGeneralContext from "./contexts/GeneralContext.jsx";
 import Header from "./components/Header/Header.jsx";
 import MovieList from "./components/MovieList/MovieList.jsx";
 import Footer from "./components/Footer/Footer.jsx";
@@ -14,13 +13,14 @@ import "./index.css";
 import "./App.css";
 
 function App() {
-  const { language } = useLanguageContext();
-  const [page, setPage] = useState(1);
+  const { language, type } = useGeneralContext();
   const apiKey = import.meta.env.VITE_API_KEY;
   const minDate = getDate("now");
   const maxDate = getDate("");
-  const minOld = "1970-01-01";
-  const maxOld = "2000-01-01";
+  const minOldMovies = "1970-01-01";
+  const maxOldMovies = "2000-01-01";
+  const minOldSeries = "1980-01-01";
+  const maxOldSeries = "2005-01-01";
 
   function getDate(time) {
     const today = new Date().toLocaleDateString();
@@ -44,18 +44,40 @@ function App() {
       path: "/",
       element: (
         <>
+          <Header />
           <Outlet />
+          <Footer />
         </>
       ),
       children: [
-        { index: true, element: <Navigate to="populaires/1" replace /> },
         {
-          path: "populaires/:id",
+          index: true,
+          element: (
+            <Navigate
+              to={type === "movies" ? "movies/trending/1" : "series/trending/1"}
+              replace
+            />
+          ),
+        },
+        {
+          path: "movies/trending/:id",
           element: (
             <>
-              <Header setPage={setPage} />
-              <MovieList key="populaires" page={page} setPage={setPage} />
-              <Footer />
+              <MovieList />
+            </>
+          ),
+          loader: async ({ params }) => {
+            const response = await fetch(
+              `https://api.themoviedb.org/3/trending/movie/week?language=${language}&page=${params.id}&${apiKey}`
+            );
+            return await response.json();
+          },
+        },
+        {
+          path: "movies/top-rated/:id",
+          element: (
+            <>
+              <MovieList />
             </>
           ),
           loader: async ({ params }) => {
@@ -66,28 +88,24 @@ function App() {
           },
         },
         {
-          path: "oldies/:id",
+          path: "movies/oldies/:id",
           element: (
             <>
-              <Header setPage={setPage} />
-              <MovieList key="oldies" page={page} setPage={setPage} />
-              <Footer />
+              <MovieList />
             </>
           ),
           loader: async ({ params }) => {
             const response = await fetch(
-              `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=${language}&page=${params.id}&primary_release_date.gte=${minOld}&primary_release_date.lte=${maxOld}&sort_by=popularity.desc&vote_count.gte=1000&${apiKey}`
+              `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=${language}&page=${params.id}&primary_release_date.gte=${minOldMovies}&primary_release_date.lte=${maxOldMovies}&sort_by=popularity.desc&vote_count.gte=1000&${apiKey}`
             );
             return await response.json();
           },
         },
         {
-          path: "upcoming/:id",
+          path: "movies/upcoming/:id",
           element: (
             <>
-              <Header setPage={setPage} />
-              <MovieList key="upcoming" page={page} setPage={setPage} />
-              <Footer />
+              <MovieList />
             </>
           ),
           loader: async ({ params }) => {
@@ -100,6 +118,48 @@ function App() {
         {
           path: "/movie/:id",
           element: <MoviePage />,
+        },
+        {
+          path: "series/trending/:id",
+          element: (
+            <>
+              <MovieList />
+            </>
+          ),
+          loader: async ({ params }) => {
+            const response = await fetch(
+              `https://api.themoviedb.org/3/trending/tv/week?language=${language}&page=${params.id}&${apiKey}`
+            );
+            return await response.json();
+          },
+        },
+        {
+          path: "series/top-rated/:id",
+          element: (
+            <>
+              <MovieList />
+            </>
+          ),
+          loader: async ({ params }) => {
+            const response = await fetch(
+              `https://api.themoviedb.org/3/discover/tv?include_adult=false&include_video=false&language=${language}&page=${params.id}&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=5000&${apiKey}`
+            );
+            return await response.json();
+          },
+        },
+        {
+          path: "series/oldies/:id",
+          element: (
+            <>
+              <MovieList />
+            </>
+          ),
+          loader: async ({ params }) => {
+            const response = await fetch(
+              `https://api.themoviedb.org/3/discover/tv?include_adult=false&include_video=false&language=${language}&page=${params.id}&first_air_date.gte=${minOldSeries}&first_air_date.lte=${maxOldSeries}&sort_by=popularity.desc&vote_count.gte=500&${apiKey}`
+            );
+            return await response.json();
+          },
         },
       ],
     },

@@ -49,3 +49,9 @@ $white: white;
   background-color: $black;
   transition: box-shadow 0.2s;
 }
+
+@mixin switch {
+  position: absolute;
+  width: 60px;
+  height: 34px;
+}
