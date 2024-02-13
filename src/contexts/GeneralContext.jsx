@@ -5,8 +5,8 @@ export const GeneralContext = createContext();
 
 export function ContextProvider({ children }) {
   const [page, setPage] = useState(1);
-  const [language, setLanguage] = useState("fr-FR");
-  const [type, setType] = useState("series");
+  const [language, setLanguage] = useState("en-EN");
+  const [type, setType] = useState("movies");
 
   function getCurrentUrl(location) {
     const currentURL = location.pathname;
